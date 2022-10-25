@@ -1,160 +1,120 @@
 
 
+// la classe Faucheuse détermine et imprime les coordonnées x,y finales et le orientation
+//  finale de la tondeuse une fois que ses instructions sont finalisées.
 class Tondeuse {
 
-  /** la methode orientation finale nous permettons de determiner une nouvelle
-   * orientation de notre tondeuse en se basant sur sa orientation intiale
-   * (N,E,W,S) et sa direction : à gauche ou bien à droite
-   */
-
-  def findFinalOrientation(
-                            orientationInitial: Char,
-                            direction: Char
+//la fonction TrouverOrientation retourne une nouvelle orientation en fonction de l'orientation
+// et la direction de la tondeuse.
+  def TrouverOrientation(
+                            orientationInitiale: Char, //L'orination initiale de la tondeuse
+                            direction: Char            //La direction intiale de la tondeuse
                           ): Char = {
 
-    var orientation_final: Char = ' '
+  //initialisation de la variable qui contiendra l'orientation finale (N,E,W,S)
+    var orientationFinale: Char = ' '
 
-    if (orientationInitial == 'N') {
+  //La structure conditionnelle imbriquée IF vérifie d'abord l'orientation initiale (N,E,W,S), puis vérifie dans un deuxième temps la direction
+  //si celle-ci est D:Droite ou G:Gauche et affecte à la variable orientation finale une valeur (N,E,W,S).
+
+    if (orientationInitiale == 'N') {
       if (direction == 'D') {
-        orientation_final = 'E'
+        orientationFinale = 'E'
       } else if (direction == 'G') {
-        orientation_final = 'W'
+        orientationFinale = 'W'
       }
-    } else if (orientationInitial == 'W') {
+    } else if (orientationInitiale == 'W') {
       if (direction == 'D') {
-        orientation_final = 'N'
+        orientationFinale = 'N'
       } else if (direction == 'G') {
-        orientation_final = 'S'
+        orientationFinale = 'S'
       }
-    } else if (orientationInitial == 'S') {
+    } else if (orientationInitiale == 'S') {
       if (direction == 'D') {
-        orientation_final = 'W'
+        orientationFinale = 'W'
       } else if (direction == 'G') {
-        orientation_final = 'E'
+        orientationFinale = 'E'
       }
-    } else if (orientationInitial == 'E') {
+    } else if (orientationInitiale == 'E') {
       if (direction == 'D') {
-        orientation_final = 'S'
+        orientationFinale = 'S'
       } else if (direction == 'G') {
-        orientation_final = 'N'
+        orientationFinale = 'N'
       }
 
     }
-    return orientation_final
+    return orientationFinale
   }
 
-  /** * On va définir une fonction sous le nom de "findposition" qui nous
-   * permettra d'afficher la position finale sous forme d'une chaine de
-   * caractere
-   */
-  def findposition(
-                    orientationInitial: Char,
-                    xIntial: Int,
-                    yIntial: Int,
-                    xlimite: Int,
+  //La fonction TrouverPosition déterminera les coordonnées x,y finales en se servant de la fonction TrouverOrientation à chaque
+  //étapedes Instructions et imprimera au final les coordonnées x,y finales et l'orientation finale de la tondeuse.
+  def TrouverPosition(
+                    orientationInitiale: Char, //L'orination initiale de la tondeuse
+                    xIntiale: Int,             //le corrdonne de la tondeuse sur l'axe de x
+                    yIntiale: Int,             //le corrdonne de la tondeuse sur l'axe de y
+                    xlimite: Int,              //xLimite et yLimite representent les coordonnées du coin supérieur droit de la pelouse.
                     ylimite: Int,
-                    mouvements: String
+                    mouvements: String         //une séquence d'instructions permettant à la tondeuse d'explorer la pelouse.
                   ): Unit = {
 
-    /** * on va initialiser la valeur de x final à valeur de de corrodone de x
-     * intial
-     */
-    var xfinal: Int = xIntial
+    var xfinale: Int = xIntiale                //Initialisation de corrdonne de x fianl en xIntiale.
 
-    /** * on va initialiser la valeur de y final à valeur de de corrodone de y
-     * intial
-     */
-    var yfinal: Int = yIntial
 
-    /** * cette variable va etre intialiser par la valeur de l'orientation
-     * Initial et ensuite de l'ecraser par la nouvelle orientation grace a
-     * notre classe orientation finale
-     */
-    var orientationFinale: Char = orientationInitial
+    var yfinale: Int = yIntiale                //Initialisation la valeur de y final à valeur de de corrodone de y intiale.
 
-    /** * c'est la varable a retourner qui contient les corrdonnées x et y
-     * finaux et la direction finale
-     */
-    var myposition: String = ""
 
-    /** * le boucle while permet de parcourir notre chaine d'instructement
-     */
+    var orientationFinale: Char = orientationInitiale //Initialisation de l'orientation finale de la tondeuse par son orientation initiale, puis écraser celle-ci avec la nouvelle orientation
+                                                      //obtenue à l'aide de la fonction TrouverOrientation.
 
-    for (element <- mouvements) {
 
-      /** * Dans cette partie on va discuter deux cases soit on pivote la
-       * tendouse a droite ou a gauche, ou bien on trouve une instruction pour
-       * le avancer
-       */
+    var positionTondeuse: String = "" //Cette variable contiendra les corrdonnées x et y finaux et la direction finale
+                                      //sous la forme : x y Orientation.
 
-      /** * si l'element au postion de l'indice i egale G ou D alors on va
-       * determiner la nouvelle orientation
-       */
 
+    for (element <- mouvements) {    //parcourir la serie de l'instruction
+
+
+  //La partie ci-dessous traitera deux cas en fonction des composants de la directive.
+  //La variable mouvements ne peut comporter que trois instruction (D, G) pour faire
+  //pivoter la tondeuse a droite ou la gauche et (A) pour la faire avancer.
+
+
+    //Priemere condition  :
       if (element == 'D' || element == 'G') {
 
-        /** * on fait appel a la classe orientationfianl afin de determiner a
-         * chaque fois la nouvelle orientation
-         */
-
-        /*  il faut rendre orienation plus dynamique*/
-        orientationFinale = findFinalOrientation(orientationFinale, element)
+      orientationFinale = TrouverOrientation(orientationFinale, element) //Affectation du valeur de l'orientation finale par resultat
+                                                                         //de la fonction TrouverOrientation pour chaque elements.
       }
 
-      /** * si l'element au postion de l'indice i egale A on va avancer la
-       * dondeuse et donc de mettre a jour les corrdonnées de x et y tout en
-       * respectant les differents cas possible
-       */
       if (element == 'A') {
 
-        /** * en se basant sur les differents orientation possible la tondeuse
-         * peut se depacer et les coordonnes de x ou y va augmenter ou diminuer
-         * de 1
-         */
 
-        /** * On utilise le case et pattern matching afin d'acualiser les
-         * corrdonnées de x et y en fonction leurs orientations
-         */
-
-        /** * On applique le pattern matching sur l'orientation genere par la
-         * classe de l'orientationfinale
-         */
+    //Les coordonnes (x,y) prendra des valeurs en fonction de l'orientation fianle obtune pour chaque element.
 
         orientationFinale match {
 
-          /** * Il existe quatre cas possible : Si l'ortientation de notre
-           * tendeuse est vers le Est "E" ou bien vers West "W", on va faire
-           * varier x sinon si elle une orientation vers Nord "N" ou bien Sud
-           * "S", on fait varie y
-           */
+    //N.B : la tondeuse deplace sur un espace de deux dimensions (x,y)
+    //Il existe quatre cas possibles :
+    //Une orienation vers le "E" ou vers le "W", va faire varier(une augmentation ou une diminution de 1) x.
+    //Une orienation vers le "S" ou vers le "N", va faire varier(une augmentation ou une diminution de 1) y.
 
-          /** * on va travailler sur un plan de deux dimensions x et y sachant
-           * les valeurs minimales correpond aux coordonnées du coin
-           * supérieur(0,0) et les valeurs maximium sont (xlimite,yfinal)
-           */
 
-          case 'N' => if (yfinal < ylimite) yfinal = yfinal + 1
+    //N.B : les zéros de conditionnement des orientations "S" et "W" sont les coordonnées de le coin inférieur gauche (0,0),
+    //      autrement dit les coordonnées finaux (x,y) ne devront pas être négatifs de sorte que la tondeuse ne dépassera
+    //      pas les frontières de la pelouse.
 
-          /** on avance d'une case sur l'axe de y */
-          case 'S' => if (yfinal > 0) yfinal = yfinal - 1
 
-          /** on  diminu par une unité la valeur de y */
-          case 'E' => if (xfinal < xlimite) xfinal = xfinal + 1
 
-          /** on avance d'une case sur l'axe de x */
-          case 'W' => if (xfinal > 0) xfinal = xfinal - 1
+          case 'N' => if (yfinale < ylimite) yfinale = yfinale + 1 //Avancement d'une case sur l'axe de y
 
-          /** on  diminu par une unité la valeur de x */
+          case 'S' => if (yfinale > 0) yfinale = yfinale - 1       //Diminution d'une case sur l'axe de y
 
-          /** le zero dans les condtions de "S" et "W" signifie que le valeur
-           * des corrdonnes ne doit pas etre negative sinon la tondeuse va
-           * sortir de son plan de travaille
-           */
+          case 'E' => if (xfinale < xlimite) xfinale = xfinale + 1 //Avancement d'une case sur l'axe de x
 
-          /** * Si les coordonnées (x,y) ne respecte pas ces condition le valeur
-           * de xfinal et yfinal ne vont pas change et vont les derniers
-           * valeurs affectées
-           */
+          case 'W' => if (xfinale > 0) xfinale = xfinale - 1       //Diminution d'une case sur l'axe de y
+
+    //Dans le cas où les les coordonnées (x,y) finaux ne respectent pas les conditions ci-dessus,  (x,y) finaux
+    // ne vont pas changer de valeur et ils vont garder la derniere valeur affectées.
 
         }
 
@@ -162,13 +122,11 @@ class Tondeuse {
 
     }
 
-    /** on contruit et retouner notre chaine de caractre qui presnete la
-     * position finale de la tondeuse sous la forme : xfinal yfinal
-     * orientationFinale
-     */
-    myposition =
-      xfinal.toString + " " + yfinal.toString + " " + orientationFinale
-    println(myposition)
+
+    positionTondeuse =
+      xfinale.toString + " " + yfinale.toString + " " + orientationFinale //Construction une chaine de caractere sous la forme
+                                                                          //xfinale yfinale orientationFinale.
+      println(positionTondeuse)
   }
 }
 
